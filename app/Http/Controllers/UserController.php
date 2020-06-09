@@ -31,9 +31,9 @@ class UserController extends Controller
                 'nick' => 'string',
                 'email' => 'required|string|email',
                 'password' => 'required|string|min:8',
-                'role' => 'string',
-                'status' => 'string',
-                'image' => 'string'
+                // 'role' => 'string',
+                // 'status' => 'string',
+                // 'image' => 'string'
             ]);
             $body['password'] = Hash::make($body['password']);
             $user = User::create($body);
@@ -48,7 +48,7 @@ class UserController extends Controller
         try {
             $credentials = $request->validate([
                 'email' => 'required|string|email',
-                'password' => 'required|string|min:8',
+                'password' => 'required|string',
             ]);
             if (!Auth::attempt($credentials)) {
                 return response(['message' => 'Wrong Credentials'], 400);
