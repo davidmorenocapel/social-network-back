@@ -24,21 +24,22 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
+        
         try {
             $body = $request->validate([
-                'name' => 'required|string',
-                'surname' => 'string',
-                'nick' => 'string',
-                'email' => 'required|string|email',
-                'password' => 'required|string|min:8',
-                // 'role' => 'string',
-                // 'status' => 'string',
-                // 'image' => 'string'
+                'name' => ['required','max:30'],
+                'surname' => ['string'],
+                'nick' => ['string'],
+                'email' => ['required'],
+                'password' => ['required'],
+                /*'role' => ['string'],
+                'status' => ['string'],
+                'image' => ['string']*/
             ]);
             $body['password'] = Hash::make($body['password']);
             $user = User::create($body);
             return response($user, 201);
-        } catch (\Exception $e) {
+        } catch (\Exception $e) {  
             return response($e, 500);
         }
     }
@@ -51,9 +52,10 @@ class UserController extends Controller
                 'password' => 'required|string',
             ]);
             if (!Auth::attempt($credentials)) {
-                return response(['message' => 'Wrong Credentials'], 400);
+                return response(['message' => 'Datos Incorrectos'], 400);
             }
-            $user = Auth::user(); //req.user, $request->user()
+            $user = Auth::user(); 
+            //req.user, $request->user();
             $token = $user->createToken('authToken')->accessToken;
             return response([
                 'user' => $user,
